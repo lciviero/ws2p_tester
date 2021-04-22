@@ -2,6 +2,7 @@ import requests
 import websocket
 import socket
 import ssl
+import datetime
 
 #################
 # configuration #
@@ -18,12 +19,13 @@ end_points_https_invalid = 0
 
 
 def get_peers():
-    """ return the peers known by the node"""
+    """return the peers known by the node"""
     req = requests.get(BMA_NODE_URL + BMA_PEERS_END_POINT)
     return req.json()['peers']
 
 
 def test_ws2p(host, port, path, timeout=1):
+    """test connexion to ws2p websocket"""
     if host[-1:] == '/':
         host = host[:-1]
 
@@ -50,7 +52,7 @@ def test_end_points(peer, timeout=1):
 
         if protocol == 'WS2P':
             # dealing with incorrect endpoint ...
-            # example pubkey D3krfq6J9AmfpKnS3gQVYoy7NzGCc61vokteTS8LJ4YH: 'WS2P 77.152.31.154 20910',
+            # example 'WS2P 77.152.31.154 20910',
             if len(ep) < 4:
                 continue
             host = ep[2]
@@ -87,6 +89,7 @@ def main():
     print('***************')
     print('*** RESULTS ***')
     print('***************')
+    print('  DateTime: {}'.format(datetime.datetime.now()))
     print('  End points tested: {}'.format(end_points_tested))
     print('  End points ok: {}'.format(end_points_ok))
     print('  Error timeout: {}'.format(end_points_timeout))
